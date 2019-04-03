@@ -107,6 +107,7 @@
     <members>Account.PreferredDealership_ref__c</members>
     <members>Account.SalaryOrientation__c</members>
     <members>Account.Test__c</members>
+	<members>Account.TestX__c</members>
     <members>Case.AssignedDealership_ref__c</members>
     <members>Case.CaseGlobalExternalId__c</members>
     <members>Case.DealerCaseStatus__c</members>
