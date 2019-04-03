@@ -13,7 +13,7 @@ before_install:
 - export SFDX_USERNAME=test-q5z6zouooks9@example.com
 - export SFDX_DOMAIN_RETRY=300
 - wget -qO- $URL | tar xJf -
-- "./sfdx/install"
+- ./sfdx/install
 - export PATH=./sfdx/$(pwd):$PATH
 - sfdx update
 - sfdx --version
