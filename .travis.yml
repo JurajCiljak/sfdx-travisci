@@ -18,8 +18,9 @@ before_install:
 - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
 - "./sfdx/install"
 - export PATH=./sfdx/$(pwd):$PATH
-- sfdx --version
+- sfdx --version 
 - sfdx plugins --core
+- sfdx force:org:list
 - sfdx force:auth:jwt:grant --clientid $SFDX_CONSUMERKEY --jwtkeyfile assets/server.key --username $SFDX_USERNAME --setdefaultdevhubusername -a mara-v2 --instanceurl https://test.salesforce.com
 
 script:
