@@ -6,7 +6,7 @@ env:
 - URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
 
 before_install:
-
+- gem install bundler
 - export SFDX_CONSUMERKEY=3MVG92u_V3UMpV.i2DsjLwz7NPFkwKNt8cOBnfSBmbhvel3y5Mt1lHWWyPslCiwiISgjDbqVFRQ==
 - export SFDX_USERNAME=test-q5z6zouooks9@example.com
 - export SFDX_AUTOUPDATE_DISABLE=false
