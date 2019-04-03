@@ -1,0 +1,101 @@
+<aura:component controller="Lead_DealershipForwardController" implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutHeader" access="global" >
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+        .select__content{
+        padding-left: 10px !important;
+        padding-right: 250px !important;
+        }
+    </aura:html>
+    <aura:attribute name="mapMarkers" type="List" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="listOfDealers" type="List" />
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:attribute name="selectedDealership" type="Object" default=""/>
+    <aura:attribute name="leadRecord" type="SObject"/>
+    
+    
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      fields="Status"
+                      recordId="{!v.recordId}"
+                      targetRecord="{!v.leadRecord}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.loadOptionsJS}" />
+    
+    <div class="slds-is-relative">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </aura:if>
+        <div class="modal-header slds-modal__header slds-size_1-of-1">
+            <h4 class="title slds-text-heading--medium">Forward to Dealer</h4>
+        </div>
+        <aura:if isTrue="{!v.leadRecord.fields.Status.value != 'Open - Not Contacted'}">
+            <h3>You cannot forward to dealer if it is already forwarded</h3>
+            <aura:set attribute="else">
+                <div class="select__content">
+                    <lightning:select aura:id="selectDealership" name="selectDealership" label="Dealerships" required="true" value="{!v.selectedValue}" onchange="{!c.getDealershipDetailsJS}">
+                        <option text="-- Please Select --" value="" />
+                        <aura:iteration items="{!v.listOfDealers}" var="item">
+                            <option text="{!item.label}" value="{!item.value}" />
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        <lightning:card variant="Narrow" title="Adress" iconName="standard:account">
+                            <p class="slds-p-horizontal_small">
+                                <div>
+                                    <span>Country: {!v.selectedDealership.address.country}</span>
+                                </div>
+                                <div>
+                                    <span>City: {!v.selectedDealership.address.city}</span>
+                                </div>
+                                <div>
+                                    <span>Street: {!v.selectedDealership.address.street}</span>
+                                </div>
+                            </p>
+                        </lightning:card>
+                    </div>
+                    <div class="slds-col">
+                        <lightning:card variant="Narrow" title="Contact" iconName="standard:contact">
+                            <p class="slds-p-horizontal_small">
+                                <div>
+                                    <span>Website: {!v.selectedDealership.website}</span>
+                                </div>
+                                <div>
+                                    <span>E-mail: {!v.selectedDealership.email}</span>
+                                </div>
+                                <div>
+                                    <span>Phone: {!v.selectedDealership.phone}</span>
+                                </div>
+                            </p>
+                        </lightning:card>
+                    </div>
+                </div>
+                <div aura:id="mapComponent">
+                    <lightning:map 
+                                   mapMarkers="{!v.mapMarkers}">
+                    </lightning:map>
+                </div>
+            </aura:set>
+            
+        </aura:if>
+        <aura:if isTrue="{!v.leadRecord.fields.Status.value == 'Open - Not Contacted'}">
+            <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+                <lightning:buttonGroup>
+                    <lightning:button label="Send" onclick="{!c.leadChangeRequestJS}"/>
+                </lightning:buttonGroup>
+            </div>
+        </aura:if>
+    </div>
+</aura:component>

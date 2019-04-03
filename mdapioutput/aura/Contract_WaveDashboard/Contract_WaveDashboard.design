@@ -1,0 +1,5 @@
+<design:component>
+	<design:attribute name ="dashboardId" label="Dashboard Id"></design:attribute>
+	<design:attribute name ="height" label="Dashboard Height"></design:attribute>
+	<design:attribute name ="filter" label="Filter"></design:attribute>
+</design:component>

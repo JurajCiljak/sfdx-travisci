@@ -1,0 +1,88 @@
+<aura:component controller="Customer_ProfilePhotoController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global" >
+    <aura:attribute name="simpleLead" type="Object"/>
+    <aura:attribute name="leadError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleLead}" action="{!c.onInitLead}"/>
+    
+    <aura:attribute name="simpleAccount" type="Object"/>
+    <aura:attribute name="accontError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleAccount}" action="{!c.onInitAccount}"/>
+    
+    <aura:attribute name="isLoaded" type="Boolean" default="{!false}" />
+    <aura:attribute name="pictureSrc" type="String" default="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+    <aura:attribute name="message" type="String" default="Drag profile picture here"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    
+    <aura:if isTrue="{!v.sObjectName == 'Account'}">
+        <force:recordData aura:id="accountDS"
+                          recordId="{!v.recordId}"
+                          fields="Id"
+                          targetFields="{!v.simpleAccount}"
+                          targetError="{!v.accontError}"
+                          />
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.sObjectName == 'Lead'}">
+                <force:recordData aura:id="leadDS"
+                                  recordId="{!v.recordId}"
+                                  fields="CustomerGlobalId__c"
+                                  targetFields="{!v.simpleLead}"
+                                  targetError="{!v.leadError}"
+                                  />
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    
+    <article class="slds-card">
+        <aura:if isTrue="{!or(v.sObjectName == 'Lead', v.sObjectName=='Account')}">
+            <aura:if isTrue="{!v.isLoaded}">
+                <div class="slds-card__body slds-card__body_inner" style="margin-top:0.75rem">
+                    <aura:if isTrue="{!v.sObjectName == 'Account'}">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_3-of-3">
+                                <div ondragover="{!c.onDragOver}" ondrop="{!c.onDrop}">
+                                    <img src="{!v.pictureSrc}"/>
+                                    
+                                </div>
+                                <aura:if isTrue="{!v.pictureSrc == 'https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png'}">
+                                    {!v.message}
+                                </aura:if>
+                            </div>
+                        </div>
+                        
+                    </aura:if>
+                    <aura:if isTrue="{!v.sObjectName == 'Lead'}">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col slds-size_3-of-3">
+                                <div ondragover="{!c.onDragOver}" ondrop="{!c.onDrop}">
+                                    <img src="{!v.pictureSrc}"/>
+                                </div>
+                                <aura:if isTrue="{!v.pictureSrc == 'https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png'}">
+                                    {!v.message}
+                                </aura:if>
+                            </div>
+                        </div>
+                    </aura:if>
+                    
+                </div>
+                <aura:set attribute="else">
+                    <div class="demo-only" style="height: 6rem;">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:set>
+                
+            </aura:if>
+            <aura:set attribute="else">
+                <div class="slds-box slds-theme–alert-texture slds-theme–warning">
+                    <lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning" Class="iconContainer"/>&nbsp;
+                    <span class="slds-text-body–regular">
+                        <aura:unescapedHtml value="Object not supported"/>
+                    </span>
+                </div>
+            </aura:set>
+        </aura:if>
+    </article>
+</aura:component>

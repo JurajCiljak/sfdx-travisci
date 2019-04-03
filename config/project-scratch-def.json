@@ -1,7 +1,32 @@
 {
-    "orgName": "wade.wegner Example",
-    "edition": "Developer",
-    "orgPreferences" : {
-        "enabled": ["S1DesktopEnabled"]
-    }
+  "orgName": "Mara V2",
+  "edition": "Developer",
+  "features": [
+	"ProcessBuilder",
+	"SiteDotCom",
+	"Sites",
+	"Workflow",
+	"EinsteinAssistant",
+	"PersonAccounts",
+	"Pardot",
+	"Communities",
+	"SalesWave",
+	"DevelopmentWave",
+	"ServiceWave",
+	"ForceComPlatform"
+	],
+
+  "settings": {
+      "orgPreferenceSettings": {
+          "networksEnabled": true,
+          "s1DesktopEnabled": true 
+      },
+      "omniChannelSettings": {
+          "enableOmniChannel": true
+      },
+
+      "caseSettings": {
+          "systemUserEmail": "juraj.ciljak@gmail.com"
+      }
+  }
 }

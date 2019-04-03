@@ -1,0 +1,56 @@
+<aura:component controller="Lead_AcceptLeadController" implements="force:hasSObjectName,force:hasRecordId,force:lightningQuickActionWithoutHeader" >
+    <aura:attribute name="simpleLead" type="Object"/>
+    <aura:attribute name="leadError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleLead}" action="{!c.onInitLead}"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:if isTrue="{!v.sObjectName == 'Lead'}"> 
+        <force:recordData aura:id="leadDS"
+                          recordId="{!v.recordId}"
+                          fields="LeadGlobalExternalId__c"
+                          targetFields="{!v.simpleLead}"
+                          targetError="{!v.leadError}"
+                          />
+        
+        <aura:html tag="style">
+            .cuf-content {
+            padding: 0 0rem !important;
+            }
+            .slds-p-around--medium {
+            padding: 0rem !important;
+            }       
+            .slds-modal__content{
+            overflow-y:hidden !important;
+            height:unset !important;
+            max-height:unset !important;
+            }
+        </aura:html>
+        <div class="slds-is-relative">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </aura:if>
+        <!--Modal Header-->  
+        <div class="modal-header slds-modal__header slds-size_1-of-1">
+            <h4 class="title slds-text-heading--medium">Accept the Lead</h4>
+        </div>
+        <!--End Modal Header-->  
+        
+        <!--Modal Body-->   
+        <div class="slds-modal__content slds-p-around--x-small slds-align_absolute-center slds-size_1-of-1 slds-is-relative">
+            <form class="slds-form--stacked">
+                Do you want to accept the lead?
+            </form> 
+        </div>
+        <!--End of Modal Body--> 
+        
+        <!--Modal Footer-->
+        <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+            <lightning:button variant="Brand" class="slds-button" label="Yes" onclick="{!c.handleSubmit}"/>
+            <lightning:button variant="Neutral" class="slds-button" label="No" onclick="{!c.handleClose}"/>
+        </div>
+        <!--End of Modal Footer-->
+        <aura:set attribute="else">
+            Component not supporting {!v.sObjectName} object
+        </aura:set>
+        </div>
+    </aura:if>
+</aura:component>

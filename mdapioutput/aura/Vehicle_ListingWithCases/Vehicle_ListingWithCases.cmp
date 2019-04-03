@@ -1,0 +1,48 @@
+<aura:component controller="Vehicle_ListingController" access="global" >
+    <aura:attribute name="vehicleId" type="Id"/>
+    <aura:attribute name="cases" type="List"/>
+    <aura:handler name="init" value="{!this}" action="{!c.initCasesForVehicle}"/>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered case-table">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="CASE">CASE</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="CONTACT NAME">CONTACT NAME</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="SUBJECT">SUBJECT</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate" title="PRIORITY">PRIORITY</div>
+                </th>
+                <th class="" scope="col"/>
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.cases}" var="case">
+            <tr class="slds-hint-parent">
+                <td data-label="Case" scope="row">
+                    <div class="slds-truncate">{!case.Id}</div>
+                </td>
+                <td data-label="Contact Name">
+                    <div class="slds-truncate">{!case.ContactId}</div>
+                </td>
+                <td data-label="Subject">
+                    <div class="slds-truncate">{!case.Subject}</div>
+                </td>
+                <td data-label="Priority">
+                    <div class="slds-truncate">{!case.Priority}</div>
+                </td>
+                <td>
+                    <lightning:buttonMenu aura:id="menu" onselect="{! c.handleSelect }" alternativeText="Show menu">
+                        <lightning:menuItem value="Edit" label="Edit" />
+                        <lightning:menuItem value="Delete" label="Delete" />
+                    </lightning:buttonMenu>
+                </td>
+            </tr>
+                </aura:iteration>
+        </tbody>
+    </table>
+</aura:component>

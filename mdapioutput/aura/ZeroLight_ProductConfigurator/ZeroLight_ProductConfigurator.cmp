@@ -1,0 +1,22 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasSObjectName,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="height" type="String" />
+    <aura:attribute name="code" type="String" />
+    
+    <aura:attribute name="simpleLead" type="Object"/>
+    <aura:attribute name="leadError" type="String"/>
+   
+    <aura:if isTrue="{!and(v.sObjectName == 'Lead')}">
+         <force:recordData aura:id="leadDS"
+                          recordId="{!v.recordId}"
+                          fields="ZeroLightCode__c"
+                          targetFields="{!v.simpleLead}"
+                          targetError="{!v.leadError}"
+                          />
+        <iframe style="{!'width:100%;height:'+v.height}"  frameborder="0" src="{!'http://porsche.zerolight.com/views/icc/?persona=PO4&amp;user=dealer.joe.mhp&amp;code='+v.simpleLead.ZeroLightCode__c}" />
+    	<aura:set attribute="else">
+            <iframe style="{!'width:100%;height:'+v.height}"  frameborder="0" src="{!'http://porsche.zerolight.com/views/icc/?persona=PO4&amp;user=dealer.joe.mhp'}" />
+        </aura:set>
+    </aura:if>
+    
+    
+</aura:component>

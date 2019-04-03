@@ -1,0 +1,24 @@
+<aura:component controller="Vehicle_PhotoCarouselController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="pictureSrc" type="String" default="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+    <aura:attribute name="pictures" type="String[]" />
+    <aura:attribute name="prefixURL" type="String" default="/sfc/servlet.shepherd/version/download/"/>
+    {!v.pictures}
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}" />
+    <article class="slds-card">
+        
+        <div class="slds-card__body slds-card__body_inner" style="margin-top:0.75rem">
+            <lightning:carousel disableAutoRefresh="false" disableAutoScroll="false" scrollDuration="2">
+                <aura:if isTrue="{!empty(v.pictures)}">
+                    <lightning:carouselImage src="https://s3-us-west-1.amazonaws.com/sfdc-demo/image-placeholder.png"/>
+                    <aura:set attribute="else">
+                        <aura:iteration items="{!v.pictures}" var="src">
+                            <lightning:carouselImage src = "{!v.prefixURL + src.ContentDocument.LatestPublishedVersionId}">
+                            </lightning:carouselImage>
+                        </aura:iteration>
+                    </aura:set>    
+                </aura:if>
+                
+            </lightning:carousel>
+        </div>
+    </article>
+</aura:component>

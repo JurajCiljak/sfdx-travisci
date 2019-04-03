@@ -1,0 +1,63 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="simpleLead" type="Object"/>
+    <aura:attribute name="leadError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleLead}" action="{!c.onInitLead}"/>
+    
+    <aura:attribute name="simpleAccount" type="Object"/>
+    <aura:attribute name="accontError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleAccount}" action="{!c.onInitAccount}"/>
+    
+    <aura:attribute name="isLoaded" type="Boolean" default="{!false}" />
+    <aura:attribute name="mapMarkers" type="Object"/>
+    <aura:attribute name="markersTitle" type="String" />
+    <aura:attribute name="zoomLevel" type="Integer" default="12"/>
+    
+    <aura:if isTrue="{!v.sObjectName == 'Account'}">
+        <force:recordData aura:id="accountDS"
+                          recordId="{!v.recordId}"
+                          fields="Id,BillingStreet,BillingCity,BillingCountry,BillingPostalCode,ShippingStreet,ShippingCity,ShippingCountry,ShippingPostalCode"
+                          targetFields="{!v.simpleAccount}"
+                          targetError="{!v.accontError}"
+                          />
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.sObjectName == 'Lead'}">
+                <force:recordData aura:id="leadDS"
+                                  recordId="{!v.recordId}"
+                                  fields="CustomerGlobalId__c,FirstName,LastName,Street,City,Country,PostalCode"
+                                  targetFields="{!v.simpleLead}"
+                                  targetError="{!v.leadError}"
+                                  />
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    
+    <lightning:card>
+        
+        <aura:if isTrue="{!or(v.sObjectName == 'Lead', v.sObjectName=='Account')}">
+            <aura:if isTrue="{!v.isLoaded}">
+                
+                    <lightning:map mapMarkers="{! v.mapMarkers }" 
+                                   zoomLevel="{!v.zoomLevel}"
+                                   markersTitle="{!v.markersTitle}"/>
+
+                <aura:set attribute="else">
+                    <div class="demo-only" style="height: 6rem;">
+                        <div role="status" class="slds-spinner slds-spinner_medium">
+                            <span class="slds-assistive-text">Loading</span>
+                            <div class="slds-spinner__dot-a"></div>
+                            <div class="slds-spinner__dot-b"></div>
+                        </div>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <aura:set attribute="else">
+                <div class="slds-box slds-theme–alert-texture slds-theme–warning">
+                    <lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning" Class="iconContainer"/>&nbsp;
+                    <span class="slds-text-body–regular">
+                        <aura:unescapedHtml value="Object not supported"/>
+                    </span>
+                </div>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+</aura:component>

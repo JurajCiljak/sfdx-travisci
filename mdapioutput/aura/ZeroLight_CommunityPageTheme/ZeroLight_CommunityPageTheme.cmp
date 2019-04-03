@@ -1,0 +1,21 @@
+<aura:component implements="forceCommunity:themeLayout" access="global" description="ZeroLight Community Page Theme">
+    <ltng:require scripts="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" afterScriptsLoaded="{!c.doInit}" />
+    <aura:attribute name="height" type="String" />
+    <aura:attribute name="header" type="Aura.Component[]" required="false"/>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="{!c.closeNav}">&times;</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Clients</a>
+        <a href="#">Contact</a>
+    </div>
+    <div style="height:92px;">
+        <div class="navigation">
+            <span style="font-size:30px;cursor:pointer" onclick="{!c.openNav}">&#9776; open</span>
+            
+        </div>
+    </div>
+    <div id="test" style="height:100%;">
+        <!--<c:ZeroLight_ProductConfigurator height="{!v.height+'px'}"/>-->
+    </div>
+</aura:component>

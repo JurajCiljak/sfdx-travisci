@@ -1,0 +1,47 @@
+<aura:component controller="ZeroLight_LiveStreamController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global" >
+    <aura:attribute name="height" type="String" />
+    <aura:attribute name="lead" type="Lead" />
+    <aura:attribute name="opp" type="Opportunity" />
+    <aura:attribute name="acc" type="Account" />
+    <aura:attribute name="obj" type="sObject" />
+    <aura:attribute name="zeroLightCode" type="String"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" access="global" />
+    
+    <article class="slds-card">
+        <div class="slds-card__body slds-card__body_inner" style="margin-top:0.75rem">
+    <aura:if isTrue="{!v.sObjectName == 'Lead'}">
+        <force:recordData aura:id="leadService"
+                          recordId="{!v.recordId}"
+                          targetRecord="{!v.lead}"
+                          layoutType="FULL"/>
+        
+        <aura:if isTrue="{!v.lead &amp;&amp; not(empty(v.zeroLightCode))}">
+            <iframe style="{!'width:100%;height:500px'}"  frameborder="0" src="{!'https://spotlight-testsite.zlthunder.net/public/porsche/customer-session-review/?code='+v.zeroLightCode}" />
+            <aura:set attribute="else">
+                <div class="slds-box slds-theme–alert-texture slds-theme–warning">
+                    <lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning" Class="iconContainer"/>&nbsp;
+                    <span class="slds-text-body–regular">
+                        <aura:unescapedHtml value="Lead does not contain ZeroLight code"/>
+                    </span>
+                </div>
+            </aura:set>
+        </aura:if>
+        <aura:set attribute="else">
+            
+            <aura:if isTrue="{!not(empty(v.zeroLightCode))}">
+              <iframe style="{!'width:100%;height:300px'}"  frameborder="0" src="{!'https://spotlight-testsite.zlthunder.net/public/porsche/customer-session-review/?code='+v.zeroLightCode}" />
+            
+              <aura:set attribute="else">
+              	<div class="slds-box slds-theme–alert-texture slds-theme–warning">
+                    <lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning" Class="iconContainer"/>&nbsp;
+                    <span class="slds-text-body–regular">
+                        <aura:unescapedHtml value="Record does not contain ZeroLight code"/>
+                    </span>
+                </div>
+              </aura:set>
+             </aura:if> 
+        </aura:set>
+    </aura:if>
+        </div>
+    </article>
+</aura:component>

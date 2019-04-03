@@ -1,0 +1,97 @@
+<aura:component controller="Vehicle_ListingController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasSObjectName,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="vehicles" type="List" />
+    <aura:attribute name="headerTitle" type="String" />
+    
+    <aura:attribute name="simpleLead" type="Object"/>
+    <aura:attribute name="leadError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleLead}" action="{!c.onInitLead}"/>
+    
+    <aura:attribute name="simpleAccount" type="Object"/>
+    <aura:attribute name="accontError" type="String"/>
+    <aura:handler name="change" value="{!v.simpleAccount}" action="{!c.onInitAccount}"/>
+    
+    <aura:attribute name="isLoaded" type="Boolean" default="{!false}" />
+
+    <aura:if isTrue="{!v.sObjectName == 'Account'}">
+        <force:recordData aura:id="accountDS"
+                          recordId="{!v.recordId}"
+                          fields="Id"
+                          targetFields="{!v.simpleAccount}"
+                          targetError="{!v.accontError}"
+                          />
+        <aura:set attribute="else">
+            <aura:if isTrue="{!v.sObjectName == 'Lead'}">
+                <force:recordData aura:id="leadDS"
+                                  recordId="{!v.recordId}"
+                                  fields="CustomerGlobalId__c,FirstName,LastName"
+                                  targetFields="{!v.simpleLead}"
+                                  targetError="{!v.leadError}"
+                                  />
+            </aura:if>
+        </aura:set>
+    </aura:if>
+    
+    <lightning:card iconName="custom:custom31" class="slds-card_boundary">
+        <aura:set attribute="title">
+            <aura:if isTrue="{!!empty(v.headerTitle)}">
+                <b>{!v.headerTitle}</b>
+                <aura:set attribute="else">
+                    <b>{!'Vehicles ('+v.vehicles.length+')'}</b>
+                </aura:set>
+            </aura:if>
+        </aura:set>
+        <aura:set attribute="actions">
+            <lightning:buttonGroup>
+                <lightning:button label="New" onclick="{!c.newVehicle}" />
+            </lightning:buttonGroup>
+        </aura:set>
+        <aura:if isTrue="{!or(v.sObjectName == 'Lead', v.sObjectName=='Account')}">
+            <div class="slds-card__body_inner">
+                <lightning:navigation aura:id="navService"/>
+                <aura:if isTrue="{!v.isLoaded}">
+                    <aura:iteration items="{!v.vehicles}" var="veh" indexVar="ind">
+                        <article class="slds-tile">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-grid slds-size_1-of-3">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <aura:unescapedHtml value="{!veh.Product_ref__r.Picture__c}" />
+                                    </div>
+                                    <div class="slds-col slds-m-left_xx-small slds-size_1-of-2">
+                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="VIN">VIN:</dt>
+                                        <dd class="slds-item_detail slds-truncate" title="Description for first label"><a data-index="{!veh.Id}" onclick="{!c.navigateTo}">{!veh.VehicleIdentificationNumber__c}</a></dd>
+                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Second Label">Brand</dt>
+                                        <dd class="slds-item_detail slds-truncate" title="Description for second label"><a data-index="{!veh.Product_ref__c}" onclick="{!c.navigateTo}">{!veh.Product_ref__r.Name}</a></dd>								
+                                        <dt class="slds-item_label slds-text-color_weak slds-truncate" title="Second Label">Year</dt>
+                                        <dd class="slds-item_detail slds-truncate" title="Description for second label">{!veh.Product_ref__r.Year__c}</dd>
+                                    </div>
+                                </div>
+                                    <div class="slds-col slds-size_2-of-3">
+                                        <c:Vehicle_ListingWithCases vehicleId="{!veh.Id}"/>
+                                    </div>
+                            </div>
+                        </article>
+                        <hr/>
+                        
+                    </aura:iteration>
+                    <aura:set attribute="else">
+                        <div class="demo-only" style="height: 6rem;">
+                            <div role="status" class="slds-spinner slds-spinner_medium">
+                                <span class="slds-assistive-text">Loading</span>
+                                <div class="slds-spinner__dot-a"></div>
+                                <div class="slds-spinner__dot-b"></div>
+                            </div>
+                        </div>
+                    </aura:set>
+                </aura:if>
+                <aura:set attribute="else">
+                    <div class="slds-box slds-theme–alert-texture slds-theme–warning">
+                        <lightning:icon iconName="utility:warning" size="medium" alternativeText="Warning" Class="iconContainer"/>&nbsp;
+                        <span class="slds-text-body–regular">
+                            <aura:unescapedHtml value="Object not supported"/>
+                        </span>
+                    </div>
+                </aura:set>
+            </div>
+        </aura:if>
+    </lightning:card>
+</aura:component>

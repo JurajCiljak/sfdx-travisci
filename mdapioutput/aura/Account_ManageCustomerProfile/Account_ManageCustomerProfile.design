@@ -1,0 +1,4 @@
+<design:component label="MARA Customer Profile Management">
+	<design:attribute name="accountId" label="Account Id" />
+
+</design:component>

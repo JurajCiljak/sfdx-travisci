@@ -1,0 +1,3 @@
+<design:component label="MARA Vehicle Listing">
+	 <design:attribute name="headerTitle" label="Component Header Title" />
+</design:component>

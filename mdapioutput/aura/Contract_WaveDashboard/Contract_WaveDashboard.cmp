@@ -1,0 +1,10 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="dashboardId" type="String" default="" />
+    <aura:attribute name="height" type="String" default="500px" />
+    <aura:attribute name="filter" type="String" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    {!v.body}
+    
+</aura:component>

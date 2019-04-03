@@ -1,0 +1,70 @@
+<aura:component controller="Account_ManageCustomerProfileController" implements="force:hasRecordId,force:lightningQuickActionWithoutHeader,forceCommunity:availableForAllPageTypes" >
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+        height:unset !important;
+        max-height:unset !important;
+        }
+    </aura:html>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="customerProfiles" type="List"/>
+    <aura:attribute name="customerProfilesToUpdate" type="List"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.loadPersonAccountsJS}" />
+    <div class="slds-is-relative">
+        <aura:if isTrue="{!v.showSpinner}">
+            <lightning:spinner alternativeText="Loading" size="medium" />
+        </aura:if>
+        <div class="modal-header slds-modal__header slds-size_1-of-1">
+            <h4 class="title slds-text-heading--medium">Manage Customer Profiles</h4>
+        </div>
+        
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Name">Customer Profile Name</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Assigned Dealership">Assigned Dealership</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Sync Status">Sync Status</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.customerProfiles}" var="row" indexVar="rowIndex">
+                    <tr class="slds-hint-parent">
+                        <td data-label="Name" scope="row">
+                            <div class="slds-truncate">{!row.Name}</div>
+                        </td>
+                        <td data-label="Assigned Dealership">
+                            <div class="slds-truncate">{!row.AssignedDealership_ref__r.Name}</div>
+                        </td>
+                        <td data-label="Sync Status">
+                            <div class="slds-truncate" data-idx="{!rowIndex}">{!row.SyncStatus__c}</div>
+                        </td>
+                        <td data-label="Sync Status">
+                            <div class="slds-truncate" data-idx="{!rowIndex}"><lightning:input type="toggle" 
+        disabled="{!or(row.SyncStatus__c == 'Pending for Sync', row.SyncStatus__c == 'Pending for Unsync')}" checked="{!or(row.SyncStatus__c == 'Synced',row.SyncStatus__c == 'Pending for Sync')}" onchange="{!c.handleToggleChangedJS}"/></div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+        
+        <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+            <lightning:buttonGroup>
+                <lightning:button label="Refresh" onclick="{!c.refreshPageJS}"/>
+                <lightning:button label="Update" onclick="{!c.updateCustomerProfilesJS}"/>
+            </lightning:buttonGroup>
+        </div>
+    </div>
+</aura:component>
